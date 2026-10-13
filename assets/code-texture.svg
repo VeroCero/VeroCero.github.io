@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 700">
+<g fill="#174e70" font-family="monospace" font-size="48" transform="rotate(-9 650 350)">
+<text x="390" y="70">const frames = 64;</text>
+<text x="460" y="160">function update(dt) {</text>
+<text x="530" y="250">for (const card of deck) {</text>
+<text x="600" y="340">card.rotation += dt;</text>
+<text x="600" y="430">card.update(dt);</text>
+<text x="530" y="520">}</text>
+<text x="460" y="610">return deck;</text>
+<text x="390" y="700">}</text>
+</g>
+</svg>

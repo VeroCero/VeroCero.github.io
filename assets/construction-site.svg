@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" role="img" aria-labelledby="title"><title id="title">Caution tape, a work in progress sign, and traffic cones</title>
+<defs><pattern id="hazard" width="70" height="55" patternUnits="userSpaceOnUse"><path d="M-25 0H0L55 55H30ZM45 0H70L125 55H100Z" fill="#1a1a1a"/></pattern></defs>
+<g stroke="#1a1a1a" stroke-width="4" stroke-linejoin="round">
+<g transform="rotate(8 450 235)"><path d="M25 204H875V259H25Z" fill="#ffde00"/><path d="M27 206H873V257H27Z" fill="url(#hazard)" stroke="none"/></g>
+<g transform="rotate(-10 450 205)"><path d="M25 178H875V233H25Z" fill="#ffde00"/><path d="M27 180H873V231H27Z" fill="url(#hazard)" stroke="none"/></g>
+<path d="M432 241H468V407H432Z" fill="#1a1a1a"/>
+<rect x="292" y="107" width="326" height="166" fill="#1a1a1a"/>
+<rect x="284" y="99" width="326" height="166" fill="#fffdf7"/>
+<rect x="298" y="113" width="298" height="138" fill="#f58220"/>
+<path d="M55 407L98 293Q107 287 116 293L159 407Z" fill="#f58220"/>
+<path d="M82 343H132L142 369H71Z" fill="#fffdf7"/>
+<path d="M45 407H169V425H45Z" fill="#1a1a1a"/>
+<path d="M737 407L780 293Q789 287 798 293L841 407Z" fill="#f58220"/>
+<path d="M764 343H814L824 369H753Z" fill="#fffdf7"/>
+<path d="M727 407H851V425H727Z" fill="#1a1a1a"/>
+</g>
+<path d="M447 123L422 164H472Z" fill="#ffde00" stroke="#1a1a1a" stroke-width="3" stroke-linejoin="round"/>
+<path d="M447 136V147" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/><circle cx="447" cy="155" r="2.5" fill="#1a1a1a"/>
+<g fill="#fffdf7" font-family="Arial,sans-serif" font-size="25" font-weight="900" text-anchor="middle"><text x="447" y="199">WORK IN</text><text x="447" y="232">PROGRESS</text></g>
+</svg>
