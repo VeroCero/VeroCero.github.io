@@ -648,7 +648,10 @@ footer{flex-wrap:wrap;justify-content:start}
 
 /* Thank-you page: the grandmothers polaroid, on its own below the corkboard, aged. */
 .gratitude-board{max-width:1100px;margin-inline:auto}
-.thanks-polaroid{width:min(300px,80%);margin:60px auto 10px;padding:14px 14px 16px;background:#f3e9cf;border:var(--border);box-shadow:inset 0 0 26px #8a5a2433,6px 8px 0 var(--ink);transform:rotate(-3deg)}
+.thanks-polaroid{position:relative;width:min(300px,80%);margin:60px auto 10px;padding:14px 14px 16px;background:#f3e9cf;border:var(--border);border-radius:2px 9px 3px 6px;box-shadow:inset 0 0 26px #8a5a2433,6px 8px 0 var(--ink);transform:perspective(900px) rotateX(5deg) rotateY(-7deg) rotate(-3deg)}
+/* Wear: two soft creases (a light ridge beside a dark fold), scuffed corners, and a few faint spots. */
+.thanks-polaroid::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;mix-blend-mode:multiply;background:linear-gradient(118deg,transparent 41%,#ffffff55 41.6%,#5a3f1f38 42.4%,transparent 43.4%),linear-gradient(32deg,transparent 66%,#ffffff40 66.4%,#5a3f1f2a 67%,transparent 67.8%),radial-gradient(circle at 96% 4%,#6b4f2a40,transparent 13%),radial-gradient(circle at 3% 97%,#6b4f2a33,transparent 11%),radial-gradient(ellipse at 22% 30%,#8a5a2418,transparent 9%),radial-gradient(ellipse at 78% 74%,#8a5a2414,transparent 8%)}
+
 .thanks-polaroid .image-slot-space{aspect-ratio:1;padding:10px;background:#e9dcbc;border-color:#6b4f2a66;filter:sepia(.35)}
 .thanks-polaroid img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;filter:sepia(.35) contrast(.92) brightness(1.03)}
 .thanks-polaroid figcaption{margin-top:12px;text-align:center;font-family:PatrickHand,Exo2,sans-serif;font-size:1.3rem;line-height:1.1;color:#3b2f22}
@@ -692,3 +695,9 @@ footer{flex-wrap:wrap;justify-content:start}
 .constellation-label.is-active{opacity:1}
 .constellation-hint{position:absolute;left:0;right:0;bottom:6px;margin:0;text-align:center;font-family:PatrickHand,Exo2,sans-serif;font-size:1.1rem;color:#1a1a1a73;opacity:0;pointer-events:none;transition:opacity .6s .4s}
 .media-pile.is-constellation:not(.is-explored) .constellation-hint{opacity:1}
+
+/* Pop-ups with several images: one row, equal heights (flex-grow is set from each image's shape). */
+.pile-card.has-multi .pile-card-images{display:flex;align-items:flex-start;gap:14px}
+.pile-card.has-multi .pile-card-image{flex:1 1 0;min-width:0}
+.pile-card.has-multi .pile-card-image.has-image img{width:100%;max-height:none}
+@media(max-width:600px){.pile-card.has-multi .pile-card-images{flex-direction:column}.pile-card.has-multi .pile-card-image{flex-grow:1!important;width:100%}}

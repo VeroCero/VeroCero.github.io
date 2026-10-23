@@ -345,6 +345,11 @@ if (pile && pileCard) {
       ? pictures.map(({ src, alt }) => `<figure class="image-slot pile-card-image has-image"><div class="image-slot-space"><img src="${escapeText(src)}" alt="${escapeText(alt)}"></div></figure>`).join('')
       : '<figure class="image-slot pile-card-image"><div class="image-slot-space"><span class="image-slot-label">Image placeholder</span></div></figure>';
     body.innerHTML = `<p class="eyebrow pile-card-type">${escapeText(item.kind || '')}</p><h3 id="pile-card-title">${escapeText(item.title)}</h3>${item.theme ? `<p class="pile-card-theme"><span>Theme</span>${escapeText(item.theme)}</p>` : ''}<p class="pile-card-blurb">${escapeText(item.blurb || 'Text placeholder.')}</p><div class="pile-card-images">${figures}</div>`;
+    // Side-by-side images share one height: each takes width in proportion to its own shape.
+    body.querySelectorAll('.pile-card-images .has-image img').forEach(img => {
+      const fit = () => { if (img.naturalWidth) img.closest('figure').style.flexGrow = img.naturalWidth / img.naturalHeight; };
+      img.complete ? fit() : img.addEventListener('load', fit, { once: true });
+    });
   };
   const showReceipt = () => {
     pileCard.classList.add('is-receipt');
