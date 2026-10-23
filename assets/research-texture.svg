@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="700" viewBox="0 0 960 700">
+<defs><pattern id="hatch" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 12L12 0" stroke="#174e70" stroke-width="1"/></pattern></defs>
+<g fill="none" stroke="#174e70" stroke-width="1.4" transform="rotate(-18 480 350)">
+<path d="M80 140H860M80 560H860M180 80V620M760 80V620" stroke-dasharray="12 6 2 6"/>
+<path d="M330 210V490L590 350Z" fill="url(#hatch)"/>
+<path d="M350 270H380M365 255V285M350 430H380"/>
+<path d="M140 270H330M140 430H330M590 350H760"/>
+<path d="M270 270V140H420L434 116L462 164L490 116L518 164L546 116L560 140H660V350"/>
+<path d="M230 430V520M200 520H260M212 536H248M224 552H236"/>
+<path d="M680 350V430M650 430H710M650 446H710M680 446V520M656 520H704M664 534H696M674 548H686"/>
+<circle cx="140" cy="270" r="9"/><circle cx="140" cy="430" r="9"/><circle cx="760" cy="350" r="9"/>
+<path d="M330 600H590M330 580V620M590 580V620M340 595L330 600L340 605M580 595L590 600L580 605"/>
+<path d="M820 210V490M800 210H840M800 490H840M815 220L820 210L825 220M815 480L820 490L825 480"/>
+</g>
+</svg>
