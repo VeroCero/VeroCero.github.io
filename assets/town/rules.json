@@ -1,0 +1,28 @@
+{
+ "groups": 7,
+ "pokemonAlone": 0.12,
+ "companions": [
+  0.5,
+  0.4,
+  0.1
+ ],
+ "directionBalance": 1,
+ "personSpeed": [
+  1.5,
+  3
+ ],
+ "pokemonAloneSpeed": [
+  1.2,
+  3.6
+ ],
+ "trailGap": 2.3,
+ "arriveDelay": [
+  0,
+  4000
+ ],
+ "stepMs3": 150,
+ "stepMs2": 220,
+ "normalSpeed": 2.2,
+ "walkerSize": 3.2,
+ "lanes": 3
+}

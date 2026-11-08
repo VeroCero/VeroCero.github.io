@@ -49,11 +49,6 @@ noticeToggle?.addEventListener('click', () => {
   noticeToggle.setAttribute('aria-label', paused ? 'Resume scrolling notice' : 'Pause scrolling notice');
   noticeToggle.textContent = paused ? '▷' : 'Ⅱ';
 });
-// The taped header tabs remain inactive; other links use the temporary page.
-document.querySelectorAll('.nav-construction a').forEach(link => {
-  link.addEventListener('click', event => event.preventDefault());
-  link.addEventListener('auxclick', event => event.preventDefault());
-});
 // A one-time nod to “Hello, Zuko here,” before the real introduction.
 const introName = document.querySelector('.intro-name');
 if (introName && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -91,7 +86,7 @@ const pileItems = [
   { type: 'vinyl', label: 'Bad Bunny Super Bowl', toplabel: 'DtMF', title: 'Bad Bunny Super Bowl', kind: 'Debí Tirar Más Fotos', theme: 'Audacity', blurb: '', color: '#ffde00', img: 'assets/bad-bunny-performance.webp', alt: 'Bad Bunny performing at the Super Bowl with string players behind him.', size: 1.4 },
   { type: 'cassette', label: 'La Copa de la Vida', sublabel: 'Ricky Martin · Spanglish', title: 'La Copa de la Vida', kind: 'Song · Ricky Martin · Spanglish version', theme: 'Determination', blurb: '', color: '#d00000', img: 'assets/la-copa-world-cup-album.webp', alt: 'Music of the World Cup album cover.', size: 1.05 },
   { type: 'cd', label: 'Hatsune Miku', title: 'Hatsune Miku', kind: 'Music', theme: 'Community', blurb: '', color: '#39c5bb', img: 'assets/miku-expo-concert.webp', alt: 'Hatsune Miku performing at a concert under blue and green lights.', size: 0.85 },
-  { type: 'floppy', label: 'TETRIS', title: 'Tetris', kind: 'Game', theme: 'Simplicity', blurb: '', color: '#2b2b2b', img: 'assets/block-out-high-score.webp', alt: 'A Block Out game screen showing a new high score, ranked first in Gainesville.', size: 0.7 },
+  { type: 'floppy', label: 'MYHOUSE.WAD', doodle: 'none', title: 'myhouse.wad', kind: 'Doom mod', blurb: '', color: '#2b2b2b', starColor: '#2b2b2b', img: 'assets/myhouse-happiness.webp', alt: 'A Doom screenshot of a golden sunset over the sea, captioned Happiness has to be fought for.', size: 0.7 },
   { type: 'receipt', label: 'Honorable mentions', title: 'Honorable mentions', size: 0.5 },
   { type: 'golden', starColor: '#d9a933', label: 'VOYAGER 1', title: 'Control, I\'m Not Coming Back', kind: 'Game · Voyager 1', theme: 'Hope', blurb: '', img: 'assets/voyager-out-here.webp', alt: 'Voyager 1 drifting among stars, captioned Out here, it\'s beautiful.', size: 0.9 },
   { type: 'pcdisc', starColor: '#fffdf7', label: 'HADES', title: 'Hades', kind: 'Game · PC', theme: 'Perseverance', blurb: '', color: '#d00000', images: [{ src: 'assets/hades-garden.webp', alt: 'A garden scene from the game Hades.' }, { src: 'assets/sunset-cliff.webp', alt: 'A red sunset over the sea, seen from a snowy cliff in Hades.' }], size: 0.8 },
@@ -106,7 +101,6 @@ const pileConnections = [
   { from: 'dvd', to: 'vinyl', label: 'love over hate' },
   { from: 'vinyl', to: 'cd', label: 'belonging' },
   { from: 'pcdisc', to: 'cassette', label: 'grit' },
-  { from: 'usb', to: 'floppy', label: 'simplicity' },
   { from: 'novel', to: 'dvd', label: 'finding meaning' },
   { from: 'novel', to: 'golden', label: 'finding meaning' },
   { from: 'cd', to: 'usb', label: 'possibility' },
@@ -122,6 +116,7 @@ const honorableMentions = [
   { name: 'Tomodachi Life: Living the Dream', format: 'SWITCH' },
   { name: 'PokéRogue', format: 'HOMEBREW' },
   { name: 'Console modding', format: 'WII' },
+  { name: 'Tetris', format: 'APP' },
 ];
 const escapeText = text => String(text).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 // Split a title into lines of roughly `max` characters for drawing inside a shape.
@@ -160,7 +155,7 @@ const pileArt = {
   // PC game disc in a paper sleeve with a window.
   pcdisc: (item) => [124, 128, `<rect x="2" y="2" width="120" height="124" fill="#fffdf7" ${ink}/><path d="M84 2A12 12 0 0 0 108 2" fill="#e8e3d6" ${ink}/>${shinyDisc(62, 54, 34)}<text x="10" y="16" font-family="Courier New, monospace" font-size="9" font-weight="700" fill="#1a1a1a">PC CD-ROM</text><rect x="2" y="96" width="120" height="30" fill="${item.color}" ${ink}/>${titleBlock(item.label, 62, 111, 100, '#fffdf7')}`],
   // 3.5" floppy with a little tetromino doodle on the label.
-  floppy: (item) => [100, 100, `<path d="M4 4H84L96 16V96H4Z" fill="${item.color}" ${ink}/><rect x="26" y="4" width="46" height="30" fill="#c9c9c9" ${ink}/><rect x="54" y="9" width="10" height="20" fill="${item.color}"/><rect x="14" y="44" width="72" height="48" fill="#fffdf7" ${ink}/><g stroke="#1a1a1a" stroke-width="1"><rect x="28" y="50" width="7" height="7" fill="#d00000"/><rect x="35" y="50" width="7" height="7" fill="#d00000"/><rect x="42" y="50" width="7" height="7" fill="#d00000"/><rect x="35" y="57" width="7" height="7" fill="#d00000"/><rect x="56" y="57" width="7" height="7" fill="#87cefa"/><rect x="63" y="57" width="7" height="7" fill="#87cefa"/><rect x="63" y="50" width="7" height="7" fill="#87cefa"/><rect x="70" y="50" width="7" height="7" fill="#87cefa"/></g>${scrawl(50, 84, 16, item.label)}`],
+  floppy: (item) => [100, 100, `<path d="M4 4H84L96 16V96H4Z" fill="${item.color}" ${ink}/><rect x="26" y="4" width="46" height="30" fill="#c9c9c9" ${ink}/><rect x="54" y="9" width="10" height="20" fill="${item.color}"/><rect x="14" y="44" width="72" height="48" fill="#fffdf7" ${ink}/>${item.doodle === 'none' ? '' : '<g stroke="#1a1a1a" stroke-width="1"><rect x="28" y="50" width="7" height="7" fill="#d00000"/><rect x="35" y="50" width="7" height="7" fill="#d00000"/><rect x="42" y="50" width="7" height="7" fill="#d00000"/><rect x="35" y="57" width="7" height="7" fill="#d00000"/><rect x="56" y="57" width="7" height="7" fill="#87cefa"/><rect x="63" y="57" width="7" height="7" fill="#87cefa"/><rect x="63" y="50" width="7" height="7" fill="#87cefa"/><rect x="70" y="50" width="7" height="7" fill="#87cefa"/></g>'}${item.doodle === 'none' ? scrawl(50, 74, 12, item.label) : scrawl(50, 84, 16, item.label)}`],
   // USB stick with a crude tape label whose corner is peeling off.
   usb: (item) => [58, 130, `<rect x="17" y="6" width="22" height="28" fill="#d0d0d0" ${ink}/><rect x="22" y="13" width="4" height="5" fill="#1a1a1a"/><rect x="30" y="13" width="4" height="5" fill="#1a1a1a"/><rect x="11" y="32" width="34" height="94" rx="6" fill="${item.color}" ${ink}/><path d="M14 50L43 46L45 100L19 104Z" fill="#fff3b0" stroke="#1a1a1a" stroke-width="1.5"/><path d="M43 46L56 60L47 71L45 64Z" fill="#e8dc96" stroke="#1a1a1a" stroke-width="1.5"/>${scrawl(30, 80, 13, item.label, 'transform="rotate(-82 30 76)"')}`],
   // Thermal receipt with a torn zigzag bottom.
@@ -591,4 +586,53 @@ if (posterDialog) {
     posterDialog.querySelector('.poster-image')?.removeAttribute('src');
     openedRoll?.focus();
   });
+}
+
+// Home decorations: on narrower layouts the polaroids move, so each piece is re-placed at the same
+// spot relative to its nearest polaroid (data-a/ax/ay, measured in the desktop layout).
+const homeDeco = document.querySelector('.home-deco');
+if (homeDeco) {
+  const stack = homeDeco.parentElement;
+  const pieces = [...homeDeco.querySelectorAll('.deco')].map(el => ({ el, left: el.style.left, top: el.style.top }));
+  const place = () => {
+    if (innerWidth > 800) {
+      pieces.forEach(({ el, left, top }) => { el.style.left = left; el.style.top = top; });
+      return;
+    }
+    pieces.forEach(({ el }) => {
+      const fig = stack.querySelector(`.polaroid-${el.dataset.a}`);
+      if (!fig) return;
+      const w = fig.offsetWidth, h = fig.offsetHeight;
+      const p = new DOMMatrix(getComputedStyle(fig).transform).transformPoint(new DOMPoint(el.dataset.ax * w, el.dataset.ay * h));
+      const x = Math.min(Math.max(fig.offsetLeft + w / 2 + p.x, 10), stack.offsetWidth - 10);
+      el.style.left = `${x}px`;
+      el.style.top = `${fig.offsetTop + h / 2 + p.y}px`;
+    });
+  };
+  place();
+  let decoTimer;
+  addEventListener('resize', () => { clearTimeout(decoTimer); decoTimer = setTimeout(place, 120); });
+}
+
+// Language flag: switches between English and Spanish and remembers the choice.
+// Text with a data-es attribute swaps to that Spanish wording; everything else stays as written.
+const langFlag = document.querySelector('.lang-flag');
+if (langFlag) {
+  const langLabel = langFlag.querySelector('.lang-flag-label');
+  const setLang = lang => {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-es]').forEach(el => {
+      if (el.dataset.en === undefined) el.dataset.en = el.textContent;
+      el.textContent = lang === 'es' ? el.dataset.es : el.dataset.en;
+    });
+    // The label is written in the language you'd switch to.
+    langLabel.textContent = lang === 'es' ? 'language' : 'idioma';
+    langFlag.lang = lang === 'es' ? 'en' : 'es';
+    langFlag.setAttribute('aria-label', lang === 'es' ? 'Switch to English' : 'Cambiar a español');
+    try { localStorage.setItem('lang', lang); } catch (error) { /* private mode: just don't remember */ }
+  };
+  let saved = 'en';
+  try { saved = localStorage.getItem('lang') || 'en'; } catch (error) { /* keep English */ }
+  if (saved === 'es') setLang('es');
+  langFlag.addEventListener('click', () => setLang(document.documentElement.lang === 'es' ? 'en' : 'es'));
 }
