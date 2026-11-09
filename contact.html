@@ -10,9 +10,9 @@
 <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Contact · Veronica R.</title>
-<link rel="stylesheet" href="style.css?v=about-cabinet-118">
-<link rel="stylesheet" href="assets/town/street.css?v=about-cabinet-118">
-<script src="script.js?v=about-cabinet-118" defer>
+<link rel="stylesheet" href="style.css?v=about-cabinet-119">
+<link rel="stylesheet" href="assets/town/street.css?v=about-cabinet-119">
+<script src="script.js?v=about-cabinet-119" defer>
 </script>
 </head>
 <body><a class="skip-link" href="#main">Skip to content</a>
@@ -29,6 +29,9 @@
 </h1>
 <p>Interested in research, neurotechnology, scientific computing, or a collaboration? I’d love to hear what you’re working on.</p>
 </section>
+<section class="section town-section" aria-label="Visitor count">
+<div class="street"><div class="scene" id="town-scene"></div></div>
+</section>
 <section class="section">
 <article class="paper contact-paper"><figure class="contact-headshot"><div class="mii-face-frame"><img src="assets/mii-headshot.jpg" alt="Veronica’s Mii headshot, with long brown hair and a brown suit." width="1280" height="720" decoding="async"></div></figure>
 <div>
@@ -39,16 +42,13 @@
 </div>
 </article>
 </section>
-<section class="section town-section" aria-label="Visitor count">
-<div class="street"><div class="scene" id="town-scene"></div></div>
-</section>
 </main>
 <footer><a class="wordmark" href="index.html"><span class="wordmark-letter letter-v">V</span><span class="wordmark-letter letter-e">E</span><span class="wordmark-letter letter-r">R</span><span class="wordmark-zero">0</span></a>
 <p>Made with curiosity. And a little color.</p><span>© 2026 Veronica R.</span><a href="thankyou.html">A little gratitude ↗</a>
 </footer>
 <script type="module">
 // The town street: walkers, the time of day, and the visitor count on the sign (from GoatCounter)
-import { createStreet } from './assets/town/street.js?v=about-cabinet-118';
+import { createStreet } from './assets/town/street.js?v=about-cabinet-119';
 const street = await createStreet(document.getElementById('town-scene'), { base: 'assets/town/', bubbleHTML: '<span class="ph">[your visitor line]</span>' });
 fetch('https://ver0.goatcounter.com/counter/TOTAL.json')
   .then(r => r.json())

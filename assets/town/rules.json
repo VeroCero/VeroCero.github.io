@@ -1,21 +1,53 @@
 {
  "groups": 7,
- "pokemonAlone": 0.12,
+ "directionBalance": 1,
+ "lanes": 3,
+ "keepToSide": 0.85,
+ "walkerSize": 3.2,
+ "pokemonOnly": 0.11,
+ "pokemonGroupSize": [
+  0.72,
+  0.2,
+  0.08
+ ],
+ "peopleGroupSize": [
+  0.62,
+  0.28,
+  0.1
+ ],
  "companions": [
   0.5,
   0.4,
   0.1
  ],
- "directionBalance": 1,
+ "bigGroups": 0.02,
  "personSpeed": [
-  1.5,
+  1.7,
   3
  ],
- "pokemonAloneSpeed": [
-  1.2,
-  3.6
+ "pokemonSpeed": [
+  2,
+  4.2
  ],
+ "paceShares": [
+  0.07,
+  0.55,
+  0.01
+ ],
+ "slowFactor": 0.65,
+ "fastFactor": 1.45,
  "trailGap": 2.3,
+ "rushAhead": 5,
+ "rushPause": [
+  1500,
+  5000
+ ],
+ "rushChance": 0.2,
+ "catchUp": 0.15,
+ "passLook": 9,
+ "passMargin": 2.5,
+ "laneChangeTime": 0.95,
+ "dodgeLook": 8,
  "arriveDelay": [
   0,
   4000
@@ -23,6 +55,11 @@
  "stepMs3": 150,
  "stepMs2": 220,
  "normalSpeed": 2.2,
- "walkerSize": 3.2,
- "lanes": 3
+ "watchChance": 0.2,
+ "watchTime": [
+  2000,
+  5000
+ ],
+ "watchRange": 1,
+ "performerStepMs": 200
 }
