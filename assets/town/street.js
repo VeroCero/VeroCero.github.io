@@ -72,6 +72,7 @@ export async function createStreet(scene, { rules, data, bubbleHTML = '', base =
   const R = rules || mergeRules(await (await fetch(B + 'rules.json', { cache: 'no-store' })).json());
   // sprites come from one packed image (d.atlas) on the site, or from single frame files in the preview tools
   const atlas = d.atlas;
+  if (atlas) { const im = new Image(); im.src = B + atlas.file; await im.decode().catch(() => {}); }
   const newSprite = () => {
     const el = atlas ? document.createElement('span') : new Image();
     el.className = 'walker';
@@ -79,6 +80,15 @@ export async function createStreet(scene, { rules, data, bubbleHTML = '', base =
     else el.alt = '';
     return el;
   };
+  // preview tools: load every frame a walker can show before they walk on, and keep the loaded images, so a walker
+  // is never seen half-drawn (the site's packed sprite image is loaded once, before anyone appears)
+  const loaded = new Map();
+  const loadFrame = name => {
+    if (!loaded.has(name)) { const im = new Image(); im.src = B + 'frames/' + name; loaded.set(name, { im, p: im.decode().catch(() => {}) }); }
+    return loaded.get(name).p;
+  };
+  const framesOf = w => [...(w.left || []), ...(w.right || []), ...(w.up || []), ...(w.back ? [w.back] : []), ...(w.perform || []).map(f => f.split('|')[0])];
+  const loadWalker = w => atlas ? Promise.resolve() : Promise.all(framesOf(w).map(loadFrame));
   const showFrame = (el, name) => {
     if (el.dataset.f === name) return;
     el.dataset.f = name;
@@ -205,6 +215,9 @@ export async function createStreet(scene, { rules, data, bubbleHTML = '', base =
     for (let tries = 0; crowded() && startInside && tries < 40; tries++) g.x = sgn > 0 ? rand(5 + length, 95) : rand(5, 95 - length);
     if (crowded()) { g.members.forEach(m => m.img.remove()); return null; }
     groups.push(g);
+    // nobody walks on (or shows) until all of the group's frames are loaded
+    g.ready = false; g.members.forEach(m => m.img.style.visibility = 'hidden');
+    Promise.all(members.map(loadWalker)).then(() => { g.ready = true; g.members.forEach(m => m.img.style.visibility = ''); });
     totals.groups++; totals[dir]++; totals.kinds[kind] = (totals.kinds[kind] || 0) + 1;
     return g;
   };
@@ -243,6 +256,18 @@ export async function createStreet(scene, { rules, data, bubbleHTML = '', base =
     const slots = g.members.map(m => m.along).sort((a, b) => b - a);
     [...g.members].sort((a, b) => (b.along + b.e) - (a.along + a.e)).forEach((m, k) => { const p = m.along + m.e; m.along = slots[k]; m.e = p - m.along; });
   };
+  const hidden = x => x <= -R.walkerSize || x >= 100;
+  const entryClear = (g, lanes) => {
+    const lead = g.x + g.sgn * Math.max(...g.members.map(m => m.along + m.e));
+    if (g.sgn > 0 ? lead > -R.walkerSize : lead < 100) return true;   // already coming in
+    const need = (g.members.length - 1) * friendGap() + R.walkerSize * 2 + LOOK_AHEAD;
+    const [z0, z1] = g.sgn > 0 ? [0, need] : [100 - need, 100];
+    const mine = g.members.map(m => posOf(g, m, lanes)[1]);
+    return !groups.some(h => h !== g && h.members.some(hm => {
+      const [x, dep] = posOf(h, hm, lanes);
+      return !hidden(x) && x + R.walkerSize > z0 && x < z1 && mine.some(d => Math.abs(d - dep) < BODY_D + 0.1);
+    }));
+  };
   const LOOK_AHEAD = 6;                // how far ahead (% of street) walkers notice someone in their path and start stepping aside
   const depthOf = (g, m, lanes) => Math.max(-0.5, Math.min(g.dmax ?? lanes - 1 + 0.5, g.laneF + g.off + g.side + m.lat * g.spread));
   const posOf = (g, m, lanes) => [g.x + g.sgn * (m.along + m.e), depthOf(g, m, lanes)];
@@ -273,7 +298,8 @@ export async function createStreet(scene, { rules, data, bubbleHTML = '', base =
       if (h === g) continue;
       for (const hm of h.members) {
         const p = posOf(h, hm, lanes);
-        for (let i = 0; i < mine.length; i++) { const s = sep(mine[i], p); if (s < 1 && s < sep(before[i], p) - 1e-9) return { h, p, me: before[i] }; }
+        if (hidden(p[0])) continue;   // fully off the end of the street: can't be seen, so can't be walked into
+        for (let i = 0; i < mine.length; i++) { if (hidden(mine[i][0])) continue; const s = sep(mine[i], p); if (s < 1 && s < sep(before[i], p) - 1e-9) return { h, p, me: before[i] }; }
       }
     }
     return null;
@@ -309,6 +335,7 @@ export async function createStreet(scene, { rules, data, bubbleHTML = '', base =
         const side = w.left && w.right ? (Math.random() < .5 ? 'left' : 'right') : (w.left ? 'left' : 'right');
         const files = w.perform || w[side];
         const img = newSprite(); img.style.width = R.walkerSize + '%'; img.dataset.id = w.id;
+        img.style.visibility = 'hidden'; loadWalker(w).then(() => img.style.visibility = '');
         scene.append(img);
         performers.push({ img, files, x: x + i * R.walkerSize * 1.05, phase: Math.random() * 4 });
       });
@@ -411,6 +438,9 @@ export async function createStreet(scene, { rules, data, bubbleHTML = '', base =
       if (watching) eff = 0;
       // a fast friend is stopped, waiting for them: the others hurry a little (not into a group they're stuck behind)
       else if (!g.following && g.members.some(m => m.mode === 'wait')) eff *= 1 + R.catchUp;
+      // still fully off the end of the street: only walk in once there's room to walk all the way in, so nobody is ever
+      // seen stopped half on screen (they wait out of sight instead)
+      if (!g.ready || !entryClear(g, lanes)) eff = 0;
       // the move this frame, in two parts: walking along the street, and stepping across it
       const before = g.members.map(m => posOf(g, m, lanes));
       const fwd0 = { x: g.x, ms: g.members.map(m => [m.e, m.mode, m.t, m.along]) }, lat0 = [g.laneF, g.off, g.side, g.spread, g.dmax];
@@ -533,10 +563,6 @@ export async function createStreet(scene, { rules, data, bubbleHTML = '', base =
         }
         const spread = (100 - d.ground) - 8;
         m.img.style.left = x + '%';
-        // walking in or out at the ends of the street: fade in/out while crossing the edge, so nobody shows as a cut-off half
-        const inside = Math.max(0, Math.min(1, (Math.min(x + R.walkerSize, 100) - Math.max(x, 0)) / R.walkerSize));
-        const op = inside >= 1 ? '' : (inside ** 3).toFixed(2);
-        if (m.img.style.opacity !== op) m.img.style.opacity = op;
         m.img.style.bottom = (2 + (lanes > 1 ? depth * spread / (lanes - 1) : 0)) + '%';
         m.img.style.zIndex = String(30 - Math.round(depth * 4));
         let filt = '';
