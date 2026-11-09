@@ -533,6 +533,10 @@ export async function createStreet(scene, { rules, data, bubbleHTML = '', base =
         }
         const spread = (100 - d.ground) - 8;
         m.img.style.left = x + '%';
+        // walking in or out at the ends of the street: fade in/out while crossing the edge, so nobody shows as a cut-off half
+        const inside = Math.max(0, Math.min(1, (Math.min(x + R.walkerSize, 100) - Math.max(x, 0)) / R.walkerSize));
+        const op = inside >= 1 ? '' : (inside ** 3).toFixed(2);
+        if (m.img.style.opacity !== op) m.img.style.opacity = op;
         m.img.style.bottom = (2 + (lanes > 1 ? depth * spread / (lanes - 1) : 0)) + '%';
         m.img.style.zIndex = String(30 - Math.round(depth * 4));
         let filt = '';

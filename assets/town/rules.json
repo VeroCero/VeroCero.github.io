@@ -42,7 +42,7 @@
   1500,
   5000
  ],
- "rushChance": 0.2,
+ "rushChance": 0.1,
  "catchUp": 0.15,
  "passLook": 9,
  "passMargin": 2.5,
@@ -58,7 +58,7 @@
  "watchChance": 0.2,
  "watchTime": [
   2000,
-  5000
+  7000
  ],
  "watchRange": 1,
  "performerStepMs": 200
