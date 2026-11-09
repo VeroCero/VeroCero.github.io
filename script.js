@@ -85,7 +85,7 @@ if (introName && !window.matchMedia('(prefers-reduced-motion: reduce)').matches)
 const pileItems = [
   { type: 'vinyl', label: 'Bad Bunny Super Bowl', toplabel: 'DtMF', title: 'Bad Bunny Super Bowl', kind: 'Debí Tirar Más Fotos', theme: 'Audacity', blurb: '', color: '#ffde00', img: 'assets/bad-bunny-performance.webp', alt: 'Bad Bunny performing at the Super Bowl with string players behind him.', size: 1.4 },
   { type: 'cassette', label: 'La Copa de la Vida', sublabel: 'Ricky Martin · Spanglish', title: 'La Copa de la Vida', kind: 'Song · Ricky Martin · Spanglish version', theme: 'Determination', blurb: '', color: '#d00000', img: 'assets/la-copa-world-cup-album.webp', alt: 'Music of the World Cup album cover.', size: 1.05 },
-  { type: 'cd', label: 'Hatsune Miku', title: 'Hatsune Miku', kind: 'Music', theme: 'Community', blurb: '', color: '#39c5bb', img: 'assets/miku-expo-concert.webp', alt: 'Hatsune Miku performing at a concert under blue and green lights.', size: 0.85 },
+  { type: 'cd', label: 'Hatsune Miku', title: 'Hatsune Miku', kind: 'Music', theme: 'Community', blurb: '“She is everything. She can fit every genre, style, theme, and message - but all are beautiful in their own way, both visually and audibly. She can always be there for you at any point in your life as she is ever changing and morphing, and given so much freedom for people to express their love for her with their own designs, MVs, and songs to share with others and give them that happiness back through her.”', blurbBy: 'My friend', color: '#39c5bb', img: 'assets/miku-expo-concert.webp', badge: 'assets/miku-friend-mii.webp', badgeAlt: 'My friend\'s Mii, in pink heart-shaped sunglasses.', alt: 'Hatsune Miku performing at a concert under blue and green lights.', size: 0.85 },
   { type: 'floppy', label: 'MYHOUSE.WAD', doodle: 'none', title: 'myhouse.wad', kind: 'Doom mod', theme: 'Resilience', blurb: '', color: '#2b2b2b', starColor: '#2b2b2b', img: 'assets/myhouse-happiness.webp', alt: 'A Doom screenshot of a golden sunset over the sea, captioned Happiness has to be fought for.', size: 0.7 },
   { type: 'receipt', label: 'Honorable mentions', title: 'Honorable mentions', size: 0.5 },
   { type: 'golden', starColor: '#d9a933', label: 'VOYAGER 1', title: 'Control, I\'m Not Coming Back', kind: 'Game · Voyager 1', theme: 'Hope', blurb: '', img: 'assets/voyager-out-here.webp', alt: 'Voyager 1 drifting among stars, captioned Out here, it\'s beautiful.', size: 0.9 },
@@ -339,15 +339,36 @@ if (pile && pileCard) {
     const pictures = item.images || (item.img ? [{ src: item.img, alt: item.alt || '' }] : []);
     pileCard.classList.toggle('has-multi', pictures.length > 1);
     const figures = pictures.length
-      ? pictures.map(({ src, alt }) => `<figure class="image-slot pile-card-image has-image"><div class="image-slot-space"><img src="${escapeText(src)}" alt="${escapeText(alt)}"></div></figure>`).join('')
+      ? pictures.map(({ src, alt }, i) => {
+        const photo = `<img src="${escapeText(src)}" alt="${escapeText(alt)}">`;
+        // badge: a small cut-out picture stuck on the corner of the first image
+        const inner = item.badge && i === 0 ? `<span class="pile-photo">${photo}<img class="pile-card-badge" src="${escapeText(item.badge)}" alt="${escapeText(item.badgeAlt || '')}"></span>` : photo;
+        return `<figure class="image-slot pile-card-image has-image"><div class="image-slot-space">${inner}</div></figure>`;
+      }).join('')
       : '<figure class="image-slot pile-card-image"><div class="image-slot-space"><span class="image-slot-label">Image placeholder</span></div></figure>';
-    body.innerHTML = `<p class="eyebrow pile-card-type">${escapeText(item.kind || '')}</p><h3 id="pile-card-title">${escapeText(item.title)}</h3>${item.theme ? `<p class="pile-card-theme"><span>Theme</span>${escapeText(item.theme)}</p>` : ''}<p class="pile-card-blurb">${escapeText(item.blurb || 'Text placeholder.')}</p><div class="pile-card-images">${figures}</div>`;
+    body.innerHTML = `<p class="eyebrow pile-card-type">${escapeText(item.kind || '')}</p><h3 id="pile-card-title">${escapeText(item.title)}</h3>${item.theme ? `<p class="pile-card-theme"><span>Theme</span>${escapeText(item.theme)}</p>` : ''}<p class="pile-card-blurb">${escapeText(item.blurb || 'Text placeholder.')}</p>${item.blurbBy ? `<p class="pile-card-by"><span>— ${escapeText(item.blurbBy)}</span></p>` : ''}<div class="pile-card-images">${figures}</div>`;
     // Side-by-side images share one height: each takes width in proportion to its own shape.
-    body.querySelectorAll('.pile-card-images .has-image img').forEach(img => {
+    body.querySelectorAll('.pile-card-images .has-image img:not(.pile-card-badge)').forEach(img => {
       const fit = () => { if (img.naturalWidth) img.closest('figure').style.flexGrow = img.naturalWidth / img.naturalHeight; };
       img.complete ? fit() : img.addEventListener('load', fit, { once: true });
     });
+    body.querySelectorAll('.pile-card-images img').forEach(img => img.addEventListener('load', drawByArrow));
+    drawByArrow();
   };
+  // A small arrow from the quote's credit line to the badge picture, drawn in the right margin so it stays off the photo.
+  const drawByArrow = () => {
+    body.querySelector('.pile-by-arrow')?.remove();
+    const by = body.querySelector('.pile-card-by span'), badge = body.querySelector('.pile-card-badge');
+    if (!by || !badge || !badge.offsetHeight) return;
+    const box = body.getBoundingClientRect(), a = by.getBoundingClientRect(), b = badge.getBoundingClientRect();
+    const photo = badge.closest('.pile-photo').getBoundingClientRect();
+    const sx = a.right - box.left + 4, sy = a.top - box.top + a.height / 2;
+    const ex = photo.right - box.left + 4, ey = b.top - box.top + b.height / 2;
+    const mx = ex + 10, r = 8;
+    const d = `M${sx} ${sy}H${mx - r}Q${mx} ${sy} ${mx} ${sy + r}V${ey - r}Q${mx} ${ey} ${mx - r} ${ey}H${ex}M${ex + 5} ${ey - 5}L${ex} ${ey}L${ex + 5} ${ey + 5}`;
+    body.insertAdjacentHTML('beforeend', `<svg class="pile-by-arrow" aria-hidden="true"><path d="${d}"/></svg>`);
+  };
+  addEventListener('resize', drawByArrow);
   const showReceipt = () => {
     pileCard.classList.add('is-receipt');
     body.innerHTML = `<p class="receipt-head" id="pile-card-title">HONORABLE MENTIONS</p><p class="receipt-sub">Subtitle placeholder</p><ul class="receipt-list">${honorableMentions.map(({ name, format }) => `<li><span>${escapeText(name.toUpperCase())}</span><span>${escapeText(format)}</span></li>`).join('')}</ul><p class="receipt-total"><span>TOTAL</span><span>${honorableMentions.length} ITEMS</span></p><p class="receipt-foot">Thank-you placeholder</p>`;
@@ -614,6 +635,18 @@ if (homeDeco) {
   place();
   let decoTimer;
   addEventListener('resize', () => { clearTimeout(decoTimer); decoTimer = setTimeout(place, 120); });
+}
+
+// Ikigai cards: end the dot paper halfway between two dot rows (rows are 24px apart, the first at 20px).
+const ikigaiLists = document.querySelectorAll('.ikigai-card ul');
+if (ikigaiLists.length) {
+  const fitDots = () => ikigaiLists.forEach(ul => {
+    const rows = Math.floor((ul.clientHeight - 20 - 18) / 24);
+    ul.style.setProperty('--dots-h', `${20 + 24 * rows + 12}px`);
+  });
+  fitDots();
+  addEventListener('load', fitDots);
+  addEventListener('resize', fitDots);
 }
 
 // Language flag: switches between English and Spanish and remembers the choice.

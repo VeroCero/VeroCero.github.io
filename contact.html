@@ -10,9 +10,9 @@
 <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Contact · Veronica R.</title>
-<link rel="stylesheet" href="style.css?v=about-cabinet-122">
-<link rel="stylesheet" href="assets/town/street.css?v=about-cabinet-122">
-<script src="script.js?v=about-cabinet-122" defer>
+<link rel="stylesheet" href="style.css?v=about-cabinet-130">
+<link rel="stylesheet" href="assets/town/street.css?v=about-cabinet-130">
+<script src="script.js?v=about-cabinet-130" defer>
 </script>
 </head>
 <body><a class="skip-link" href="#main">Skip to content</a>
@@ -48,7 +48,7 @@
 </footer>
 <script type="module">
 // The town street: walkers, the time of day, and the visitor count on the sign (from GoatCounter)
-import { createStreet } from './assets/town/street.js?v=about-cabinet-122';
+import { createStreet } from './assets/town/street.js?v=about-cabinet-130';
 const street = await createStreet(document.getElementById('town-scene'), { base: 'assets/town/', bubbleHTML: '<span class="ph">[your visitor line]</span>' });
 fetch('https://ver0.goatcounter.com/counter/TOTAL.json')
   .then(r => r.json())
