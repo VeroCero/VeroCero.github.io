@@ -86,7 +86,7 @@ const pileItems = [
   { type: 'vinyl', label: 'Bad Bunny Super Bowl', toplabel: 'DtMF', title: 'Bad Bunny Super Bowl', kind: 'Debí Tirar Más Fotos', theme: 'Audacity', blurb: '', color: '#ffde00', img: 'assets/bad-bunny-performance.webp', alt: 'Bad Bunny performing at the Super Bowl with string players behind him.', size: 1.4 },
   { type: 'cassette', label: 'La Copa de la Vida', sublabel: 'Ricky Martin · Spanglish', title: 'La Copa de la Vida', kind: 'Song · Ricky Martin · Spanglish version', theme: 'Determination', blurb: '', color: '#d00000', img: 'assets/la-copa-world-cup-album.webp', alt: 'Music of the World Cup album cover.', size: 1.05 },
   { type: 'cd', label: 'Hatsune Miku', title: 'Hatsune Miku', kind: 'Music', theme: 'Community', blurb: '', color: '#39c5bb', img: 'assets/miku-expo-concert.webp', alt: 'Hatsune Miku performing at a concert under blue and green lights.', size: 0.85 },
-  { type: 'floppy', label: 'MYHOUSE.WAD', doodle: 'none', title: 'myhouse.wad', kind: 'Doom mod', blurb: '', color: '#2b2b2b', starColor: '#2b2b2b', img: 'assets/myhouse-happiness.webp', alt: 'A Doom screenshot of a golden sunset over the sea, captioned Happiness has to be fought for.', size: 0.7 },
+  { type: 'floppy', label: 'MYHOUSE.WAD', doodle: 'none', title: 'myhouse.wad', kind: 'Doom mod', theme: 'Resilience', blurb: '', color: '#2b2b2b', starColor: '#2b2b2b', img: 'assets/myhouse-happiness.webp', alt: 'A Doom screenshot of a golden sunset over the sea, captioned Happiness has to be fought for.', size: 0.7 },
   { type: 'receipt', label: 'Honorable mentions', title: 'Honorable mentions', size: 0.5 },
   { type: 'golden', starColor: '#d9a933', label: 'VOYAGER 1', title: 'Control, I\'m Not Coming Back', kind: 'Game · Voyager 1', theme: 'Hope', blurb: '', img: 'assets/voyager-out-here.webp', alt: 'Voyager 1 drifting among stars, captioned Out here, it\'s beautiful.', size: 0.9 },
   { type: 'pcdisc', starColor: '#fffdf7', label: 'HADES', title: 'Hades', kind: 'Game · PC', theme: 'Perseverance', blurb: '', color: '#d00000', images: [{ src: 'assets/hades-garden.webp', alt: 'A garden scene from the game Hades.' }, { src: 'assets/sunset-cliff.webp', alt: 'A red sunset over the sea, seen from a snowy cliff in Hades.' }], size: 0.8 },
@@ -105,6 +105,8 @@ const pileConnections = [
   { from: 'novel', to: 'golden', label: 'finding meaning' },
   { from: 'cd', to: 'usb', label: 'possibility' },
   { from: 'cassette', to: 'novel', label: 'passion' },
+  { from: 'floppy', to: 'golden', label: 'moving forward' },
+  { from: 'pcdisc', to: 'floppy', label: 'moving forward' },
 ];
 // Shown on the receipt card. Add a line to add a mention.
 const honorableMentions = [

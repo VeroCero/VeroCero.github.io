@@ -547,7 +547,7 @@ footer{flex-wrap:wrap;justify-content:start}
 
 /* ===== About page: banner, ikigai, object pile, saved datasheet ===== */
 .about-intro{position:relative;isolation:isolate;overflow:hidden}
-.about-intro::before{content:"";position:absolute;inset:0;z-index:-1;background:url('assets/constellation-texture.svg') right center/auto 115% no-repeat;opacity:.09;pointer-events:none;mask-image:linear-gradient(90deg,transparent,black 65%)}
+.about-intro::before{content:"";position:absolute;inset:0;z-index:-1;background:url('assets/constellation-texture.svg?v=2') right center/auto 115% no-repeat;opacity:.09;pointer-events:none;mask-image:linear-gradient(90deg,transparent,black 65%)}
 .about-intro .outlined{color:var(--red);-webkit-text-stroke:0;text-shadow:3px 3px var(--yellow)}
 
 .north-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:50px;align-items:center}
