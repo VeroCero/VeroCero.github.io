@@ -547,6 +547,107 @@ if (pile && pileCard) {
   pileCard.addEventListener('close', () => openedFrom?.focus());
 }
 
+// Work page research interests: a filing cabinet. Clicking the top drawer pulls it out; each folder in it is an interest,
+// and clicking one lifts it out and opens it as a case file beside the cabinet. The two lower drawers are locked.
+// tab: the short name on the folder tab; title and topics fill the sheet; img/alt and note are optional (placeholders until filled).
+const researchFolders = [
+  { tab: 'Neuro', title: 'Neurotechnology', topics: ['Neural implants', 'Brain–computer interfaces (BCI)', 'Restoring function lost to neurodegenerative disease', 'Medical image segmentation and computer vision'], note: '' },
+  { tab: 'Signals', title: 'Signal processing and AI', topics: ['Signal processing', 'Machine learning and deep learning', 'Agentic AI'], note: '' },
+  { tab: 'Modeling', title: 'Modeling and simulation', topics: ['In silico modeling', 'Digital twins', 'Physics-based modeling'], note: '' },
+  { tab: 'Unconv.', title: 'Unconventional computing', topics: ['Analog computing', 'Neuromorphic computing', 'Quantum computing', 'FPAAs and low-latency, low-power devices'], note: '' },
+  { tab: 'Hardware', title: 'Hardware design', topics: ['IC design and VLSI', 'PCB design', 'Electrode design'], note: '' },
+  { tab: 'HPC', title: 'High-performance computing', topics: ['Compilers', 'Linux', 'Real-time operating systems (RTOS)', 'Parallelization', 'GPU optimization', 'Accelerators: GPU, APU, TPU, NPU'], note: '' },
+  { tab: 'Graphics', title: 'Rendering and graphics', topics: ['Rendering engines', '3D graphics and modeling'], note: '' },
+  { tab: 'Security', title: 'Cyber and hardware security', topics: ['Secure networking protocols', 'Silicon trojans'], note: '' },
+];
+const drawerFolders = document.querySelector('[data-drawer-folders]');
+const caseFile = document.querySelector('.case-file');
+if (drawerFolders && caseFile) {
+  const desk = caseFile.parentElement;
+  const drawer = document.querySelector('[data-cabinet-drawer]');
+  const drawerFront = drawer.querySelector('.drawer-front');
+  const stickers = ['#d00000', '#87cefa', '#ffde00', '#00ab44'];
+  const svgNS = 'http://www.w3.org/2000/svg';
+  let current = -1;
+  // The cabinet is seen from its left side: the drawer floor runs from its front edge (y 208, x 208–432)
+  // back into the cabinet (90 left, 70 up).
+  const folders = researchFolders.map((folder, index) => {
+    const depth = 0.88 - index * (0.78 / (researchFolders.length - 1));
+    const base = 208 - 70 * depth, left = 216 - 90 * depth, width = 208, height = 28;
+    const tabX = left + width - 68 - (index % 3) * 68;
+    const g = document.createElementNS(svgNS, 'g');
+    g.setAttribute('class', 'drawer-folder');
+    g.setAttribute('role', 'button');
+    g.setAttribute('tabindex', '0');
+    g.setAttribute('aria-label', folder.title);
+    g.innerHTML = `<path d="M${tabX} ${base - height}l4 -18h56l4 18z" fill="#d9b46e" stroke="#1a1a1a" stroke-width="2.5" stroke-linejoin="round"/>
+      <rect x="${tabX + 7}" y="${base - height - 15}" width="50" height="13" fill="#fffdf7" stroke="#1a1a1a" stroke-width="1.5"/>
+      <rect x="${tabX + 7}" y="${base - height - 15}" width="50" height="3.5" fill="${stickers[index % stickers.length]}" stroke="#1a1a1a" stroke-width="1.5"/>
+      <text x="${tabX + 32}" y="${base - height - 4.5}" text-anchor="middle" font-family="Bungee, Arial, sans-serif" font-size="7.6" fill="#1a1a1a">${escapeText(folder.tab.toUpperCase())}</text>
+      <rect class="drawer-folder-body" x="${left}" y="${base - height}" width="${width}" height="${height + 6}" fill="${index % 2 ? '#ecce92' : '#e2bf7c'}" stroke="#1a1a1a" stroke-width="2.5"/>`;
+    const open = () => openFolder(index);
+    g.addEventListener('click', open);
+    g.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); } });
+    drawerFolders.append(g);
+    return g;
+  });
+  const openFolder = index => {
+    if (index === current) return closeFolder();
+    current = index;
+    const folder = researchFolders[index];
+    folders.forEach((g, i) => g.classList.toggle('is-out', i === index));
+    caseFile.style.setProperty('--sticker', stickers[index % stickers.length]);
+    const photo = folder.img
+      ? `<img src="${escapeText(folder.img)}" alt="${escapeText(folder.alt || '')}">`
+      : '<span>Image placeholder</span>';
+    // each folder is arranged a little differently (four layouts, taken in turn); its own tab sits where it did in the drawer
+    const count = researchFolders.length, prev = (index + count - 1) % count, next = (index + 1) % count;
+    caseFile.className = `case-file case-layout-${index % 4 + 1}`;
+    caseFile.style.setProperty('--tab-at', `${[4, 34, 62][index % 3]}%`);
+    caseFile.innerHTML = `<p class="case-tab"><span>${escapeText(folder.tab)}</span></p>
+      <button class="case-close" type="button" aria-label="Close the folder">✕</button>
+      <figure class="case-photo">${photo}</figure>
+      <p class="case-note">${escapeText(folder.note || 'Note placeholder')}</p>
+      <div class="case-sheet"><h3>${escapeText(folder.title)}</h3><ul>${folder.topics.map(topic => `<li>${escapeText(topic)}</li>`).join('')}</ul></div>
+      <span class="case-stamp" aria-hidden="true">ON FILE</span>
+      <p class="case-flip"><button type="button" data-go="${prev}">← ${escapeText(researchFolders[prev].tab)}</button><button type="button" data-go="${next}">${escapeText(researchFolders[next].tab)} →</button></p>`;
+    caseFile.querySelector('.case-close').addEventListener('click', closeFolder);
+    caseFile.querySelectorAll('.case-flip button').forEach((button, side) => button.addEventListener('click', () => {
+      openFolder(+button.dataset.go);
+      caseFile.querySelectorAll('.case-flip button')[side].focus();   // keep flipping in the same direction
+    }));
+    const wasHidden = caseFile.hidden;
+    caseFile.hidden = false;
+    desk.classList.add('is-open');
+    if (wasHidden) caseFile.animate([{ opacity: 0, transform: 'translateX(-24px) rotate(-2deg)' }, { opacity: 1, transform: 'none' }], { duration: matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260, easing: 'ease-out' });
+    if (innerWidth < 900) caseFile.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+  const setDrawer = open => {
+    drawer.classList.toggle('is-open', open);
+    drawerFront.setAttribute('aria-expanded', open);
+    if (!open && current >= 0) closeFolder(false);
+  };
+  const toggleDrawer = () => setDrawer(!drawer.classList.contains('is-open'));
+  drawerFront.addEventListener('click', toggleDrawer);
+  drawerFront.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleDrawer(); } });
+  // locked drawers just rattle (a hidden key could open them one day)
+  document.querySelectorAll('.locked-drawer').forEach(locked => {
+    const rattle = () => { locked.classList.remove('is-rattling'); void locked.getBBox(); locked.classList.add('is-rattling'); };
+    locked.addEventListener('click', rattle);
+    locked.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); rattle(); } });
+    locked.addEventListener('animationend', () => locked.classList.remove('is-rattling'));
+  });
+  const closeFolder = (refocus = true) => {
+    const was = current;
+    current = -1;
+    folders.forEach(g => g.classList.remove('is-out'));
+    caseFile.hidden = true;
+    desk.classList.remove('is-open');
+    if (refocus && was >= 0) folders[was].focus();
+  };
+  caseFile.addEventListener('keydown', event => { if (event.key === 'Escape') closeFolder(); });
+}
+
 // Phone menu: the three-bar button opens and closes the nav.
 const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.getElementById('site-nav');

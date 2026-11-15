@@ -806,3 +806,62 @@ footer{flex-wrap:wrap;justify-content:start}
 
 /* ===== Contact: the town street (styles in assets/town/street.css) ===== */
 .town-section{padding-top:48px;padding-bottom:0}
+
+/* ===== Work: research interests: a filing cabinet whose folders open into case files ===== */
+.cabinet-desk{display:grid;grid-template-columns:minmax(0,420px) minmax(0,600px);justify-content:center;align-items:center;gap:clamp(20px,4vw,48px)}
+.file-cabinet{display:block;width:100%;height:auto;overflow:visible}
+.cabinet-drawer{transform:translate(-90px,-70px);transition:transform .35s ease-in-out}
+.cabinet-drawer.is-open{transform:none}
+.cabinet-drawer:not(.is-open):has(.drawer-front:hover){transform:translate(-80px,-62px)}
+.drawer-inside{opacity:0;visibility:hidden;transition:opacity .15s,visibility 0s .15s}
+.is-open .drawer-inside{opacity:1;visibility:visible;transition:opacity .25s .1s,visibility 0s}
+.drawer-front,.locked-drawer{cursor:pointer;outline:none}
+.drawer-front:focus-visible rect:first-child,.locked-drawer:focus-visible rect:first-child{stroke:var(--red);stroke-width:4}
+.locked-drawer.is-rattling{animation:drawer-rattle .35s}
+@keyframes drawer-rattle{20%{transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-2px)}80%{transform:translateX(1px)}}
+.drawer-folder{cursor:pointer;transition:transform .2s ease-out;outline:none}
+.drawer-folder:hover{transform:translateY(-8px)}
+.drawer-folder.is-out{transform:translateY(-30px)}
+.drawer-folder:focus-visible .drawer-folder-body,.drawer-folder:focus-visible path{stroke:var(--red);stroke-width:3.5}
+.case-file{position:relative;display:grid;gap:18px;padding:26px 24px 20px;margin-top:34px;border:3px solid var(--ink);box-shadow:8px 8px var(--ink);background:#ecce92;color:var(--ink);
+  grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);grid-template-areas:"photo sheet" "note sheet" "flip flip"}
+.case-file[hidden]{display:none}
+.case-tab{position:absolute;left:var(--tab-at);bottom:100%;margin:0 0 -3px;padding:6px 10px 4px;background:#ecce92;border:3px solid var(--ink);border-bottom:0;border-radius:10px 10px 0 0}
+.case-tab span{display:block;padding:1px 10px;background:var(--paper);border:1.5px solid var(--ink);border-top:5px solid var(--sticker);font-family:Bungee,Arial,sans-serif;font-size:.75rem}
+.case-photo{grid-area:photo;margin:0;aspect-ratio:4/3;background:#d9d3c7;border:2px solid var(--ink);box-shadow:3px 3px var(--ink);transform:rotate(2deg);display:grid;place-items:center;overflow:hidden;font-size:.8rem;color:#1a1a1a99;position:relative}
+.case-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.case-photo::before{content:"";position:absolute;left:18%;top:-14px;width:14px;height:40px;border:3px solid #7d8a90;border-radius:9px}
+.case-note{grid-area:note;align-self:start;margin:0;padding:10px 12px;background:var(--yellow);border:2px solid var(--ink);box-shadow:3px 3px var(--ink);transform:rotate(-3deg);font-family:PatrickHand,Exo2,sans-serif;font-size:1.05rem;line-height:1.3}
+.case-sheet{grid-area:sheet;background:var(--paper) repeating-linear-gradient(transparent 0 27px,#87cefa66 27px 28px) 0 52px;border:2px solid var(--ink);box-shadow:4px 4px var(--ink);padding:14px 18px 34px;transform:rotate(-1deg);min-height:220px}
+.case-sheet h3{font-family:Bungee,Arial,sans-serif;font-weight:400;font-size:1.15rem;line-height:1.15;margin:0 0 8px}
+.case-sheet ul{margin:0;padding-left:20px;font-family:PatrickHand,Exo2,sans-serif;font-size:1.15rem;line-height:28px}
+.case-stamp{position:absolute;right:34px;bottom:58px;padding:2px 10px;border:3px solid var(--red);color:var(--red);font-family:Bungee,Arial,sans-serif;font-size:.8rem;letter-spacing:.08em;transform:rotate(-11deg);background:#fffdf7cc}
+.case-close{position:absolute;top:-16px;right:-16px;z-index:2;width:34px;height:34px;border:var(--border);background:var(--yellow);box-shadow:2px 2px var(--ink);cursor:pointer;font-size:.9rem}
+.case-close:hover{transform:translate(1px,1px);box-shadow:1px 1px var(--ink)}
+.case-flip{grid-area:flip;display:flex;justify-content:space-between;margin:0;border-top:1.5px dashed #1a1a1a55;padding-top:8px}
+.case-flip button{padding:2px 4px;border:0;background:none;font-family:PatrickHand,Exo2,sans-serif;font-size:1.1rem;color:#1a1a1aaa;cursor:pointer}
+.case-flip button:hover,.case-flip button:focus-visible{color:var(--ink);text-decoration:underline wavy var(--red) 1.5px}
+/* layout 2: sheet on the left, photo taped on the right */
+.case-layout-2{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);grid-template-areas:"sheet photo" "sheet note" "flip flip"}
+.case-layout-2 .case-photo{transform:rotate(-2.5deg)}
+.case-layout-2 .case-photo::before{left:auto;right:30%;top:-10px;width:56px;height:20px;border:0;border-radius:0;background:#fffdf7aa;outline:1px solid #1a1a1a33;transform:rotate(4deg)}
+.case-layout-2 .case-note{transform:rotate(2.5deg);background:var(--sky-blue)}
+.case-layout-2 .case-sheet{transform:rotate(.8deg)}
+.case-layout-2 .case-stamp{right:auto;left:44%;bottom:64px;transform:rotate(8deg)}
+/* layout 3: one wide sheet with a polaroid pinned over its corner and a note at the bottom */
+.case-layout-3{grid-template-columns:minmax(0,1fr) minmax(0,.55fr);grid-template-areas:"sheet photo" "note ." "flip flip"}
+.case-layout-3 .case-photo{margin:-6px 0 0 -40px;align-self:start;padding:8px 8px 26px;background:var(--paper);aspect-ratio:auto;transform:rotate(5deg);z-index:1}
+.case-layout-3 .case-photo::before{left:44%;top:-8px;width:14px;height:14px;border:0;border-radius:50%;background:var(--red);outline:2px solid var(--ink)}
+.case-layout-3 .case-photo > *{aspect-ratio:1;width:100%;display:grid;place-items:center;background:#d9d3c7}
+.case-layout-3 .case-note{width:70%;margin-top:-34px;z-index:1;transform:rotate(-1.5deg);background:#ffb3c7}
+.case-layout-3 .case-stamp{bottom:150px;right:auto;left:30%;transform:rotate(-7deg)}
+/* layout 4: photo and note across the top, sheet underneath */
+.case-layout-4{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"photo note" "sheet sheet" "flip flip"}
+.case-layout-4 .case-photo{transform:rotate(-1.5deg)}
+.case-layout-4 .case-photo::before{left:auto;right:16%}
+.case-layout-4 .case-note{align-self:center;transform:rotate(3deg);background:#b8f0c0}
+.case-layout-4 .case-sheet{min-height:0;transform:rotate(.6deg)}
+.case-layout-4 .case-stamp{bottom:52px;right:28px;transform:rotate(-16deg)}
+@media(max-width:900px){.cabinet-desk{grid-template-columns:minmax(0,520px);justify-content:start}}
+@media(max-width:560px){.case-file[class]{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"photo note" "sheet sheet" "flip flip";padding:22px 16px 14px}.case-file .case-photo,.case-file .case-note{margin:0;width:auto;align-self:center}.case-file .case-stamp{top:auto;bottom:56px;left:auto;right:22px}}
+@media(prefers-reduced-motion:reduce){.drawer-folder,.cabinet-drawer,.drawer-inside{transition:none}.locked-drawer.is-rattling{animation:none}}
