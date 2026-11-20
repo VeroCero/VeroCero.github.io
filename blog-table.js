@@ -13,7 +13,7 @@ const eightBallAnswers = [
 // Fortunes. One is shown per day, in order. `image` is optional: give it a path like
 // 'assets/blog/fortune-garden.jpg' and it is printed on the slip like an old, cheap colour printer.
 const fortunes = [
-  { text: '[Your fortune placeholder]', image: '' },
+  { text: 'Hope means we can change.', image: 'assets/blog/fortunes/hope-cat.webp' },
   { text: '[Another fortune placeholder]', image: '' },
 ];
 
@@ -107,7 +107,7 @@ const luckyNumbers = () => {
 const printImage = src => new Promise((resolve, reject) => {
   const image = new Image();
   image.onload = () => { try {
-    const width = 64;
+    const width = 104;
     const height = Math.round(width * image.naturalHeight / image.naturalWidth);
     const canvas = document.createElement('canvas');
     canvas.width = width;
@@ -129,8 +129,13 @@ const printImage = src => new Promise((resolve, reject) => {
         const dither = ((bayer[(y % 4) * 4 + (x % 4)] + 0.5) / 16 - 0.5) * 0.7;
         const band = y % 9 === 0 ? 14 : 0;
         const inks = [at(x + 1, y, 0), at(x, y, 1), at(x, y + 1, 2)];
+        // Near-white areas get no ink at all, like a real printer leaving the paper blank.
+        if (at(x, y, 0) > 242 && at(x, y, 1) > 242 && at(x, y, 2) > 242) {
+          printed.data.set([255, 253, 247, 255], i);
+          continue;
+        }
         inks.forEach((value, channel) => {
-          const faded = value * 0.82 + 34 + band;
+          const faded = value * 0.9 + 18 + band;
           printed.data[i + channel] = Math.max(0, Math.min(255, Math.round((faded / 255) * levels + dither) / levels * 255));
         });
         printed.data[i + 3] = 255;

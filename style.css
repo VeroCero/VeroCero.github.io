@@ -771,7 +771,7 @@ a.logo-tape:focus-visible{outline-offset:-3px}
 .blog-intro::before{content:"";position:absolute;inset:0;z-index:-1;background:url('assets/ginkgo-texture.svg') right center/auto 115% no-repeat;opacity:.09;pointer-events:none;mask-image:linear-gradient(90deg,transparent,black 65%)}
 .blog-intro .outlined{color:var(--red);-webkit-text-stroke:0;text-shadow:3px 3px var(--yellow)}
 .visually-hidden{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-.reading-room{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:40px clamp(30px,5vw,70px);padding-top:60px;padding-bottom:70px}
+.reading-room{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:40px clamp(30px,5vw,70px);padding-top:60px;padding-bottom:70px;overflow-x:clip}
 
 /* The rack: a back layer (frame, shelf, newspapers), covers in the pockets, and the front wires on top. */
 .rack{position:relative;flex:0 1 480px;width:min(480px,100%);aspect-ratio:480/720}
@@ -829,7 +829,12 @@ a.logo-tape:focus-visible{outline-offset:-3px}
 .cv-bottom{padding:2cqw 4cqw;background:var(--ink);color:#ffd23a;font-size:3.6cqw;text-align:center;text-transform:uppercase}
 
 /* The nook: bonsai stand and side table. Positions are percentages of a 560 x 420 drawing. */
-.nook{position:relative;flex:0 1 560px;width:min(560px,100%);aspect-ratio:560/420}
+/* The wall holds the frames; the furniture drawing sits at its bottom. */
+.nook-wall{position:relative;flex:0 1 560px;width:min(560px,100%);aspect-ratio:560/700}
+.nook{position:absolute;left:0;bottom:0;width:100%;aspect-ratio:560/420}
+.wall-frame{position:absolute;box-sizing:border-box;padding:var(--t,1.8%);background:#9c6b3f;border:3px solid var(--ink);box-shadow:6px 7px 0 var(--ink)}
+.wall-frame::before{content:"";position:absolute;inset:calc(var(--t,1.8%) * .45);border:2px solid #7d5330;pointer-events:none}
+.wall-frame img{display:block;box-sizing:border-box;width:100%;height:100%;object-fit:cover;border:2px solid var(--ink)}
 .nook>*{position:absolute;display:block}
 .nook img{width:100%;height:auto;display:block}
 .nook-piece{filter:drop-shadow(6px 7px 0 #1a1a1a)}
