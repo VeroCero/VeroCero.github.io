@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1300 700">
+<defs>
+<g id="ginkgo" fill="none" stroke="#174e70" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<path vector-effect="non-scaling-stroke" d="M0 0Q3 18-2 38"/>
+<path vector-effect="non-scaling-stroke" d="M0 0Q-18-20-48-38C-44-58-22-67-6-62L0-50L6-62C22-67 44-58 48-38Q18-20 0 0Z"/>
+<path vector-effect="non-scaling-stroke" d="M0-3L-40-50M0-3L-26-61M0-3L-12-63M0-3L12-63M0-3L26-61M0-3L40-50" stroke-width="1.5"/>
+</g>
+<g id="feather" fill="none" stroke="#174e70" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<path vector-effect="non-scaling-stroke" d="M0 36Q3-40 0-132"/>
+<path vector-effect="non-scaling-stroke" d="M0-8Q-14-14-16-40L-9-45Q-17-72-12-102Q-6-124 0-132"/>
+<path vector-effect="non-scaling-stroke" d="M0-132Q14-122 20-98Q25-78 20-64L12-61Q23-40 16-20Q10-6 0-2"/>
+<path vector-effect="non-scaling-stroke" d="M0-4Q-10-2-15 8M1-2Q11 0 14 10M0 4Q-6 10-8 18" stroke-width="1.5"/>
+<path vector-effect="non-scaling-stroke" d="M0-62L-12-74M0-92L-10-104M0-34L14-48M0-84L16-96" stroke-width="1.5"/>
+</g>
+</defs>
+<use xlink:href="#ginkgo" href="#ginkgo" transform="translate(760 92) rotate(-28) scale(1.15)"/>
+<use xlink:href="#feather" href="#feather" transform="translate(905 230) rotate(38) scale(1.05)"/>
+<use xlink:href="#ginkgo" href="#ginkgo" transform="translate(1080 120) rotate(22) scale(.9)"/>
+<use xlink:href="#ginkgo" href="#ginkgo" transform="translate(1215 300) rotate(-142) scale(1.2)"/>
+<use xlink:href="#ginkgo" href="#ginkgo" transform="translate(705 395) rotate(160) scale(.85)"/>
+<use xlink:href="#feather" href="#feather" transform="translate(1165 560) rotate(-62) scale(.9)"/>
+<use xlink:href="#ginkgo" href="#ginkgo" transform="translate(965 470) rotate(58) scale(1.3)"/>
+<use xlink:href="#ginkgo" href="#ginkgo" transform="translate(830 640) rotate(-95) scale(1)"/>
+<use xlink:href="#ginkgo" href="#ginkgo" transform="translate(1270 60) rotate(110) scale(.8)"/>
+</svg>

@@ -27,6 +27,8 @@ const portfolioImages = {
   'contact-mii': { src: '', alt: '' },
   'notes': { src: '', alt: '' },
   'gratitude': { src: '', alt: '' },
+  // BIRD cover photo: shown on the Blog rack and on the BIRD issue page.
+  'blog-bird-cover': { src: '', alt: '' },
 };
 document.querySelectorAll('[data-image-slot]').forEach(slot => {
   const asset = portfolioImages[slot.dataset.imageSlot];
