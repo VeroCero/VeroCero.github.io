@@ -14,7 +14,6 @@ const eightBallAnswers = [
 // 'assets/blog/fortune-garden.jpg' and it is printed on the slip like an old, cheap colour printer.
 const fortunes = [
   { text: 'Hope means we can change.', image: 'assets/blog/fortunes/hope-cat.webp' },
-  { text: '[Another fortune placeholder]', image: '' },
 ];
 
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
